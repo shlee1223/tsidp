@@ -480,6 +480,8 @@ func (s *IDPServer) serveTokenExchange(w http.ResponseWriter, r *http.Request) {
 
 	// Return RFC 8693 compliant response
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Cache-Control", "no-store")
+	w.Header().Set("Pragma", "no-cache")
 	response := map[string]any{
 		"access_token":      newAccessToken,
 		"issued_token_type": "urn:ietf:params:oauth:token-type:access_token",
@@ -627,6 +629,8 @@ func (s *IDPServer) issueTokens(w http.ResponseWriter, r *http.Request, ar *Auth
 		slog.String("redirect_uri", ar.RedirectURI),
 	)
 
+	w.Header().Set("Cache-Control", "no-store")
+	w.Header().Set("Pragma", "no-cache")
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(oidcTokenResponse{
 		AccessToken:  at,

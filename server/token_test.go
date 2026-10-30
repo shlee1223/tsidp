@@ -1336,6 +1336,12 @@ func TestServeToken(t *testing.T) {
 			if rr.Code != http.StatusOK {
 				t.Fatalf("expected 200 OK, got %d: %s", rr.Code, rr.Body.String())
 			}
+			if got := rr.Header().Get("Cache-Control"); got != "no-store" {
+				t.Errorf("Cache-Control = %q, want no-store", got)
+			}
+			if got := rr.Header().Get("Pragma"); got != "no-cache" {
+				t.Errorf("Pragma = %q, want no-cache", got)
+			}
 
 			var resp struct {
 				IDToken string `json:"id_token"`
